@@ -18,13 +18,13 @@ node {
      def myTestContainer = docker.image('node:4.6')
      myTestContainer.pull()
      myTestContainer.inside("--link ${mysql.id}:mysql") { // using linking, mysql will be available at host: mysql, port: 3306
-          sh 'npm install' 
+          sh 'npm install --only=dev' 
           sh 'npm test'                     
      }                                   
      mysql.stop()
    }                                     
    stage('docker build/push') {            
-     docker.withRegistry('https://index.docker.io/v1/', '') {
+     docker.withRegistry('https://index.docker.io/v1/', 'cad85063-75c2-4f3c-92e1-0f5e34522bdd') {
        def app = docker.build("eteston/docker-nodejs-demo:${commit_id}", '.').push()
      }                                     
    }                                       
